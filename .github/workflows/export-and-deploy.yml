@@ -41,9 +41,9 @@ jobs:
         # Set EXPORT_NAME and ITCH_GAME_ID based on branch  
         - name: Set EXPORT_NAME
           run: |
-            if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
               echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> $GITHUB_ENV
-            elif [[ "${GITHUB_REF}" == "refs/heads/development" ]]; then
+            elif [ "${GITHUB_REF}" = "refs/heads/development" ]; then
               echo "EXPORT_NAME=development" >> $GITHUB_ENV
             else
               echo "Branch not configured for export"
@@ -90,7 +90,7 @@ jobs:
       # Ensure this job runs after the export-web job
       needs: export-web
       # Only run this job on main or development branch
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+      if: github.ref = 'refs/heads/main' || github.ref = 'refs/heads/development'
       strategy:
         fail-fast: true
         matrix:
