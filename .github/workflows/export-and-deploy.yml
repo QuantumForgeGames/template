@@ -41,16 +41,9 @@ jobs:
         # Set EXPORT_NAME and ITCH_GAME_ID based on branch  
         - name: Set EXPORT_NAME
           run: |
-            if [ "${GITHUB_REF}" == "refs/heads/main" ] 
-            then
-              echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> $GITHUB_ENV
-            elif [ "${GITHUB_REF}" == "refs/heads/development" ] 
-            then
-              echo "EXPORT_NAME=development" >> $GITHUB_ENV
-            else
-              echo "Branch not configured for export"
-              exit 1
-            fi
+            echo $GITHUB_ENV
+            echo $GITHUB_REF 
+
         - name: Set ITCH_GAME_ID
           run: "ITCH_GAME_ID=${{ env.EXPORT_NAME }}"
 
