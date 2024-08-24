@@ -50,7 +50,7 @@ jobs:
         - name: Set EXPORT_NAME
           id: set-variables
           run: |
-            if [ $GITHUB_REF == "refs/heads/main" ]
+            if [ "$GITHUB_REF" == "refs/heads/main" ]
             then
                 echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
                 echo "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
