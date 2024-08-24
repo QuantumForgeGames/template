@@ -41,7 +41,11 @@ jobs:
         # Debugging step to show Itchio Username
         - name: Check Itchio Name
           run: echo ${{ env.ITCH_USERNAME }}
-        
+                
+        # Debugging step to show GITHUB_REF variable
+        - name: Check GITHUB_REF
+          run: echo $GITHUB_REF
+          
         # Set EXPORT_NAME and ITCH_GAME_ID based on branch  
         - name: Set EXPORT_NAME
           id: set-variables
