@@ -44,13 +44,11 @@ jobs:
             if [$GITHUB_REF == "refs/heads/main"]
             then
                 echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> "$GITHUB_ENV"
+                echo "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_ENV"
             else
                 echo "EXPORT_NAME=development" >> "$GITHUB_ENV" >> "$GITHUB_ENV"
+                echo "ITCH_GAME_ID=development" >> "$GITHUB_ENV" >> "$GITHUB_ENV"
             fi
-
-        - name: Set ITCH_GAME_ID
-          run: | 
-              "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_ENV"
 
         # Sets up the Godot export templates directory
         - name: Setup Godot Export Templates
