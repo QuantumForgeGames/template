@@ -42,7 +42,7 @@ jobs:
         - name: Set EXPORT_NAME
           run: |
             echo $GITHUB_ENV
-            echo "{EXPORT_NAME}={value}" >> "$GITHUB_ENV"
+            echo "EXPORT_NAME=$env.PROJECT_NAME" >> "$GITHUB_ENV"
             echo $GITHUB_REF 
 
         - name: Set ITCH_GAME_ID
