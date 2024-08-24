@@ -92,6 +92,8 @@ jobs:
       runs-on: ubuntu-latest
       # Ensure this job runs after the export-web job
       needs: export-web
+      env:
+        ITCH_GAME_ID: $ {{needs.export-web.outputs.itch-game-id}}
       # Only run this job on main or development branch
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
       strategy:
@@ -100,8 +102,6 @@ jobs:
           channel:
             - web
       steps:
-        - env:
-            ITCH_GAME_ID: $ {{needs.export-web.outputs.itch-game-id}}
         # Downloads the artifact produced by the previous jobs
         - name: Download Artifact
           uses: actions/download-artifact@v2.0.8
