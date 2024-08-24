@@ -18,6 +18,10 @@ jobs:
       name: Web Export
       # The type of runner that the job will run on
       runs-on: ubuntu-20.04
+      # Maps variables from one job to another
+      outputs:
+          export-name: ${{ steps.set-variables.outputs.EXPORT_NAME }}
+          itch-game-id: ${{ steps.set-variables.outputs.ITCH_GAME_ID }}
       # Docker image to export Godot Engine games
       container:
         image: barichello/godot-ci:4.3
@@ -40,14 +44,15 @@ jobs:
         
         # Set EXPORT_NAME and ITCH_GAME_ID based on branch  
         - name: Set EXPORT_NAME
+          id: set-variables
           run: |
             if [$GITHUB_REF == "refs/heads/main"]
             then
-                echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> "$GITHUB_ENV"
-                echo "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_ENV"
+                echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
+                echo "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
             else
-                echo "EXPORT_NAME=development" >> "$GITHUB_ENV" >> "$GITHUB_ENV"
-                echo "ITCH_GAME_ID=development" >> "$GITHUB_ENV" >> "$GITHUB_ENV"
+                echo "EXPORT_NAME=development" >> "$GITHUB_OUTPUT"
+                echo "ITCH_GAME_ID=development" >> "$GITHUB_OUTPUT"
             fi
 
         # Sets up the Godot export templates directory
@@ -95,6 +100,8 @@ jobs:
           channel:
             - web
       steps:
+        - env:
+            ITCH_GAME_ID: $ {{needs.export-web.outputs.itch-game-id}}
         # Downloads the artifact produced by the previous jobs
         - name: Download Artifact
           uses: actions/download-artifact@v2.0.8
@@ -109,6 +116,6 @@ jobs:
             butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
             gameData: ./build/${{ matrix.channel }}
             itchUsername: ${{ env.ITCH_USERNAME }}
-            itchGameId: ${{ env.ITCH_GAME_ID }}
+            itchGameId: $ITCH_GAME_ID
             buildChannel: ${{ matrix.channel }}
             buildNumber: ${{ github.run_number }}
