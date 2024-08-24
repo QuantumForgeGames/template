@@ -8,9 +8,8 @@ on:
 
 env:
   GODOT_VERSION: 4.3
-  EXPORT_NAME: template
   ITCH_USERNAME: quantum-forge-games
-  ITCH_GAME_ID: template
+  PROJECT_NAME: template
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,6 +18,10 @@ jobs:
       name: Web Export
       # The type of runner that the job will run on
       runs-on: ubuntu-20.04
+      # Maps variables from one job to another
+      outputs:
+          export-name: ${{ steps.set-variables.outputs.EXPORT_NAME }}
+          itch-game-id: ${{ steps.set-variables.outputs.ITCH_GAME_ID }}
       # Docker image to export Godot Engine games
       container:
         image: barichello/godot-ci:4.3
@@ -38,7 +41,24 @@ jobs:
         # Debugging step to show Itchio Username
         - name: Check Itchio Name
           run: echo ${{ env.ITCH_USERNAME }}
-            
+                
+        # Debugging step to show GITHUB_REF variable
+        - name: Check GITHUB_REF
+          run: echo $GITHUB_REF
+          
+        # Set EXPORT_NAME and ITCH_GAME_ID based on branch  
+        - name: Set EXPORT_NAME
+          id: set-variables
+          run: |
+            if [ "$GITHUB_REF" = "refs/heads/main" ]
+            then
+                echo "EXPORT_NAME=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
+                echo "ITCH_GAME_ID=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
+            else
+                echo "EXPORT_NAME=development" >> "$GITHUB_OUTPUT"
+                echo "ITCH_GAME_ID=development" >> "$GITHUB_OUTPUT"
+            fi
+
         # Sets up the Godot export templates directory
         - name: Setup Godot Export Templates
           run: |
@@ -76,8 +96,10 @@ jobs:
       runs-on: ubuntu-latest
       # Ensure this job runs after the export-web job
       needs: export-web
-      # Only run this job on main branch
-      if: github.ref == 'refs/heads/main'  
+      env:
+        ITCH_GAME_ID: ${{needs.export-web.outputs.itch-game-id}}
+      # Only run this job on main or development branch
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
       strategy:
         fail-fast: true
         matrix:
@@ -98,6 +120,6 @@ jobs:
             butlerApiKey: ${{ secrets.BUTLER_API_KEY }}
             gameData: ./build/${{ matrix.channel }}
             itchUsername: ${{ env.ITCH_USERNAME }}
-            itchGameId: ${{ env.ITCH_GAME_ID }}
+            itchGameId: $ITCH_GAME_ID
             buildChannel: ${{ matrix.channel }}
             buildNumber: ${{ github.run_number }}
