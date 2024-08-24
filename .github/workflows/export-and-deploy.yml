@@ -20,7 +20,7 @@ jobs:
       runs-on: ubuntu-20.04
       # Docker image to export Godot Engine games
       container:
-        image: barichello/godot-ci:4.2.2
+        image: barichello/godot-ci:4.3
   
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -42,7 +42,7 @@ jobs:
         - name: Set EXPORT_NAME
           run: |
             echo $GITHUB_ENV
-            echo "EXPORT_NAME=$env.PROJECT_NAME" >> "$GITHUB_ENV"
+            echo "EXPORT_NAME=${env.PROJECT_NAME}" >> "$GITHUB_ENV"
             echo $GITHUB_REF 
 
         - name: Set ITCH_GAME_ID
