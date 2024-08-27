@@ -1,9 +1,6 @@
 extends Node2D
 
 
-@export var mob_scene: PackedScene
-
-
 func start():
 	$Player.start($StartPosition.position)
 
@@ -15,7 +12,7 @@ func end():
 
 func _on_mob_timer_timeout() -> void:
 	# Create a new instance of the Mob scene.
-	var mob = mob_scene.instantiate()
+	var mob = GameScenes.MobScene.instantiate()
 
 	# Choose a random location on Path2D.
 	var mob_spawn_location = $MobPath/MobSpawnLocation

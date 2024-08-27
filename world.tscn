@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://blhop6xxf4e7f"]
+[gd_scene load_steps=5 format=3 uid="uid://blhop6xxf4e7f"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_3mal0"]
 [ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://art/floor_main.png" id="1_mpuym"]
-[ext_resource type="PackedScene" uid="uid://c43dt3kwb11dc" path="res://mob.tscn" id="2_4q4xw"]
 [ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://player.tscn" id="2_dqglm"]
 
 [sub_resource type="Curve2D" id="Curve2D_17h6k"]
@@ -13,7 +12,6 @@ point_count = 5
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_3mal0")
-mob_scene = ExtResource("2_4q4xw")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 1920.0
