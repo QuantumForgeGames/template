@@ -1,56 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://r5g55u0uynu7"]
+[gd_scene load_steps=5 format=3 uid="uid://r5g55u0uynu7"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_0s1wp"]
-[ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://player.tscn" id="1_nxt8v"]
-[ext_resource type="PackedScene" uid="uid://c43dt3kwb11dc" path="res://mob.tscn" id="2_nngm1"]
-[ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://art/floor_main.png" id="3_odi07"]
-[ext_resource type="PackedScene" uid="uid://f2rhb1ju02uk" path="res://hud.tscn" id="4_ewit3"]
+[ext_resource type="PackedScene" uid="uid://blhop6xxf4e7f" path="res://world.tscn" id="3_r0gao"]
 [ext_resource type="AudioStream" uid="uid://dyx8rvekumw25" path="res://art/music_level1.wav" id="5_1rqno"]
-
-[sub_resource type="Curve2D" id="Curve2D_17h6k"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 1920, 0, 0, 0, 0, 0, 1920, 1080, 0, 0, 0, 0, 0, 1080, 0, 0, 0, 0, -8, 0, 0, 0, 0, 0, 1920, 0)
-}
-point_count = 5
+[ext_resource type="PackedScene" uid="uid://dsgpqwdascowj" path="res://gui.tscn" id="5_l1k28"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_0s1wp")
-mob_scene = ExtResource("2_nngm1")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_odi07")
-
-[node name="Player" parent="." instance=ExtResource("1_nxt8v")]
-
-[node name="MobTimer" type="Timer" parent="."]
-
-[node name="ScoreTimer" type="Timer" parent="."]
+[node name="World" parent="." instance=ExtResource("3_r0gao")]
 
 [node name="StartTimer" type="Timer" parent="."]
 
-[node name="StartPosition" type="Marker2D" parent="."]
-visible = false
-position = Vector2(960, 540)
-
-[node name="MobPath" type="Path2D" parent="."]
-curve = SubResource("Curve2D_17h6k")
-
-[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
-position = Vector2(1920, 0)
-rotation = 1.5708
-
-[node name="HUD" parent="." instance=ExtResource("4_ewit3")]
+[node name="GUI" parent="." instance=ExtResource("5_l1k28")]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_1rqno")
 
-[connection signal="hit" from="Player" to="." method="game_over"]
-[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
-[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
-[connection signal="start_game" from="HUD" to="." method="new_game"]
