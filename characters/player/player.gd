@@ -1,9 +1,15 @@
 extends Area2D
 
-signal player_attacked
+signal gameplay_ended
 
-@export var speed = 400 # How fast the player will move (pixels/sec).
+
+@export var animated_sprite: AnimatedSprite2D
+@export var collision_shape: CollisionShape2D
+
+
+const SPEED = 400 # How fast the player will move (pixels/sec).
 var screen_size # Size of the game window.
+
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -22,32 +28,32 @@ func _process(delta):
 		velocity.y -= 1
 
 	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-		$AnimatedSprite2D.play()
+		velocity = velocity.normalized() * SPEED
+		animated_sprite.play()
 	else:
-		$AnimatedSprite2D.stop()
+		animated_sprite.stop()
 		
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
 
 	if velocity.x != 0:
-		$AnimatedSprite2D.animation = "walk"
-		$AnimatedSprite2D.flip_v = false
+		animated_sprite.animation = "walk"
+		animated_sprite.flip_v = false
 		# See the note below about the following boolean assignment.
-		$AnimatedSprite2D.flip_h = velocity.x < 0
+		animated_sprite.flip_h = velocity.x < 0
 	elif velocity.y != 0:
-		$AnimatedSprite2D.animation = "up"
-		$AnimatedSprite2D.flip_v = velocity.y > 0
+		animated_sprite.animation = "up"
+		animated_sprite.flip_v = velocity.y > 0
 
 
 func _on_body_entered(body):
 	hide() # Player disappears after being hit.
-	player_attacked.emit()
+	gameplay_ended.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
-	$CollisionShape2D.set_deferred("disabled", true)
+	collision_shape.set_deferred("disabled", true)
 
 
 func start(pos):
 	position = pos
 	show()
-	$CollisionShape2D.disabled = false
+	collision_shape.disabled = false

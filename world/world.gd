@@ -1,13 +1,20 @@
 extends Node2D
 
 
+@export var player: Area2D
+@export var start_position: Marker2D
+@export var mob_spawn_location: PathFollow2D
+@export var mob_timer: Timer
+
+
+
 func start():
-	$Player.start($StartPosition.position)
+	player.start(start_position.position)
 
 
 func end():
 	#$DeathSound.play()
-	$MobTimer.stop()
+	mob_timer.stop()
 
 
 func _on_mob_timer_timeout() -> void:
@@ -15,7 +22,7 @@ func _on_mob_timer_timeout() -> void:
 	var mob = GameScenes.MobScene.instantiate()
 
 	# Choose a random location on Path2D.
-	var mob_spawn_location = $MobPath/MobSpawnLocation
+	var mob_spawn_location = mob_spawn_location
 	mob_spawn_location.progress_ratio = randf()
 
 	# Set the mob's direction perpendicular to the path direction.

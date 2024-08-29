@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://blhop6xxf4e7f"]
 
-[ext_resource type="Script" path="res://world.gd" id="1_3mal0"]
-[ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://art/floor_main.png" id="1_mpuym"]
-[ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://player.tscn" id="2_dqglm"]
+[ext_resource type="Script" path="res://world/world.gd" id="1_3mal0"]
+[ext_resource type="Texture2D" uid="uid://dcts6dr1mggcy" path="res://world/floor_main.png" id="1_mpuym"]
+[ext_resource type="PackedScene" uid="uid://bpvsuqrmyoivc" path="res://characters/player/player.tscn" id="2_dqglm"]
 
 [sub_resource type="Curve2D" id="Curve2D_17h6k"]
 _data = {
@@ -10,8 +10,12 @@ _data = {
 }
 point_count = 5
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" node_paths=PackedStringArray("player", "start_position", "mob_spawn_location", "mob_timer")]
 script = ExtResource("1_3mal0")
+player = NodePath("Player")
+start_position = NodePath("StartPosition")
+mob_spawn_location = NodePath("MobPath/MobSpawnLocation")
+mob_timer = NodePath("MobTimer")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 1920.0
