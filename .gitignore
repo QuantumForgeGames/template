@@ -6,11 +6,5 @@
 *.import
 *.translation
 
-addons/*
-large_assets/*
-
-# Mono-specific ignores
-.mono/
-
 *.tmp
 *.png~
